@@ -62,4 +62,4 @@ SEG = [
 
 if __name__ == '__main__':
     import sys
-    print(render(SEG, sys.argv[1] if len(sys.argv) > 1 else '/tmp/07.mp4'))
+    print(render(SEG, sys.argv[1], audio_file=sys.argv[2] if len(sys.argv) > 2 else None))

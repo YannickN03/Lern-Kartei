@@ -290,7 +290,60 @@ def tts(text, path):
         return w.getnframes() / w.getframerate()
 
 # ---------- Rendern ----------
-def render(segments, out, title_card=None, workdir='/tmp/shortwork'):
+def silences(audio, d=0.22):
+    r = subprocess.run(['ffmpeg', '-hide_banner', '-i', audio, '-af', f'silencedetect=noise=-38dB:d={d}', '-f', 'null', '-'],
+                       capture_output=True, text=True).stderr
+    st = [float(x) for x in re.findall(r'silence_start: ([\d.]+)', r)]
+    en = [float(x) for x in re.findall(r'silence_end: ([\d.]+)', r)]
+    return list(zip(st, en))
+
+def syllables(t):
+    t = re.sub(r'\b([A-Z]{2,})\b', lambda m: ' '.join('a' for _ in m.group(1)), t)  # Abkürzungen buchstabiert
+    return max(1, len(re.findall(r'[aeiouyäöüAEIOUYÄÖÜ]+', t)))
+
+def split_points(audio, texts, workdir=None):
+    """Ordnet Szenen-Texte einer Sprachspur zu: erwartete Wechsel aus Silbenzahl, dann per DP die
+    passendste Pause je Wechsel (monoton, längere Pausen bevorzugt)."""
+    n = len(texts)
+    total = float(subprocess.run(['ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', audio],
+                                 capture_output=True, text=True).stdout)
+    sil = silences(audio)
+    lead = sil[0][1] if sil and sil[0][0] < 0.05 else 0.0
+    tail = total - sil[-1][0] if sil and sil[-1][1] > total - 0.05 else 0.0
+    cand = [(a, e) for a, e in sil if a > lead + 0.3 and e < total - tail - 0.3]
+    syl = [syllables(t) for t in texts]
+    speech = total - lead - tail
+    cum, acc = [], 0
+    for k in syl[:-1]:
+        acc += k; cum.append(lead + speech * acc / sum(syl))
+    INF = float('inf')
+    rate = speech / sum(syl)
+    pts = [lead] + [(a + e) / 2 for a, e in cand] + [total - tail]   # 0 = Start, letzter = Ende
+    lens = [0] + [e - a for a, e in cand] + [0]
+    M = len(pts)
+    def seg_cost(i, j, k):
+        dur = pts[j] - pts[i]
+        exp_ = syl[k] * rate
+        return ((dur - exp_) / (0.9 + 0.12 * exp_)) ** 2 - 2.5 * lens[j]
+    dp = [[INF] * M for _ in range(n)]; bp = [[-1] * M for _ in range(n)]
+    dp[0] = [seg_cost(0, j, 0) if 0 < j < M - 1 else INF for j in range(M)]
+    for k in range(1, n):
+        for j in range(1, M):
+            if k < n - 1 and j == M - 1: continue
+            if k == n - 1 and j != M - 1: continue
+            for i in range(1, j):
+                if dp[k - 1][i] < INF:
+                    c = dp[k - 1][i] + seg_cost(i, j, k)
+                    if c < dp[k][j]: dp[k][j], bp[k][j] = c, i
+    j = M - 1; picks = []
+    for k in range(n - 1, 0, -1):
+        j = bp[k][j]; picks.append(j)
+    picks.reverse()
+    cuts = [pts[j] for j in picks]
+    bounds = [0.0] + cuts + [total]
+    return [b - a for a, b in zip(bounds, bounds[1:])], cuts, [lead + rate * sum(syl[:k + 1]) for k in range(n - 1)]
+
+def render(segments, out, title_card=None, workdir='/tmp/shortwork', audio_file=None):
     shutil.rmtree(workdir, ignore_errors=True); os.makedirs(workdir)
     bg = paper()
     state = {}       # id -> [El, hl]
@@ -320,9 +373,13 @@ def render(segments, out, title_card=None, workdir='/tmp/shortwork'):
         return p
 
     pause = 0.32
+    ext = split_points(audio_file, [seg.get('gsay', seg['say']) for seg in segments])[0] if audio_file else None
     for si, seg in enumerate(segments):
         wav = f'{workdir}/a{si:03d}.wav'
-        dur = tts(seg['say'], wav) + pause
+        if ext:
+            dur = ext[si]
+        else:
+            dur = tts(seg['say'], wav) + pause
         audio.append((wav, dur))
         new = []
         for op in seg.get('do', []):
@@ -350,6 +407,9 @@ def render(segments, out, title_card=None, workdir='/tmp/shortwork'):
                 cd -= (fade_steps - 1) / FPS
             frames.append((snap(cap=c), max(cd, 1 / FPS)))
     # Audio zusammenfügen
+    if ext:
+        subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', audio_file, '-ac', '1', '-c:a', 'pcm_s16le', f'{workdir}/voice.wav'], check=True)
+        return _mux(frames, workdir, out, gemini=True) or sum(ext)
     lst = f'{workdir}/audio.txt'
     with open(lst, 'w') as fh:
         for wav, dur in audio:
@@ -358,16 +418,20 @@ def render(segments, out, title_card=None, workdir='/tmp/shortwork'):
     sr = 16000
     subprocess.run(['ffmpeg', '-v', 'error', '-y', '-f', 'lavfi', '-i', f'anullsrc=r={sr}:cl=mono', '-t', str(pause), f'{workdir}/sil.wav'], check=True)
     subprocess.run(['ffmpeg', '-v', 'error', '-y', '-f', 'concat', '-safe', '0', '-i', lst, '-c:a', 'pcm_s16le', f'{workdir}/voice.wav'], check=True)
+    _mux(frames, workdir, out)
+    return sum(d for _, d in audio)
+
+def _mux(frames, workdir, out, gemini=False):
+    af = 'loudnorm=I=-16:TP=-1.5,aresample=44100' if gemini else 'highpass=f=80,lowpass=f=7000,acompressor=threshold=-18dB:ratio=3,loudnorm=I=-16:TP=-1.5,aresample=44100'
     vl = f'{workdir}/video.txt'
     with open(vl, 'w') as fh:
         for p, dur in frames:
             fh.write(f"file '{p}'\nduration {dur:.4f}\n")
         fh.write(f"file '{frames[-1][0]}'\n")
     subprocess.run(['ffmpeg', '-v', 'error', '-y', '-f', 'concat', '-safe', '0', '-i', vl, '-i', f'{workdir}/voice.wav',
-                    '-af', 'highpass=f=80,lowpass=f=7000,acompressor=threshold=-18dB:ratio=3,loudnorm=I=-16:TP=-1.5,aresample=44100',
+                    '-af', af,
                     '-vf', f'fps={FPS},format=yuv420p', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '23', '-r', str(FPS),
                     '-c:a', 'aac', '-b:a', '96k', '-ac', '2', '-shortest', '-movflags', '+faststart', out], check=True)
-    return sum(d for _, d in audio)
 
 def title(t, sub, color=BLUE, tsize=50):
     return [('clear',),
