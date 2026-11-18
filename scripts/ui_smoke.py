@@ -104,12 +104,13 @@ with sync_playwright() as p:
     shot("14-shorts-feed")
     assert pg.locator(".short[data-i]").count() == 2, "erwartet 2 Shorts im Feed"
     pg.click(".short[data-i='0'] [data-like]")
-    pg.wait_for_timeout(200)
+    pg.wait_for_selector(".short[data-i='0'] [data-like].on")
     # bis zum Ende laufen lassen → „gesehen“ + automatisch zum nächsten
     pg.wait_for_function("JSON.parse(localStorage.getItem('lk-mock')).shorts?.['01-sql-joins']?.seen === true", timeout=15000)
     pg.wait_for_function("document.querySelector('#feed').scrollTop > 100", timeout=8000)
     shot("15-shorts-next")
     pg.click("[data-f=liked]")
+    pg.wait_for_selector("[data-f=liked].on")
     pg.wait_for_selector(".short[data-i]")
     assert pg.locator(".short[data-i]").count() == 1, "Merkliste sollte 1 Short enthalten"
     pg.goto(base + "#/deck/sql")
