@@ -5,42 +5,115 @@
       "title": "SQL-JOINs: INNER vs. LEFT",
       "description": "Zwei Tabellen, zwei JOINs – welche Zeilen bleiben übrig und wo lauert der typische Prüfungsfehler?",
       "deck": "sql",
-      "tags": ["SQL", "JOIN"]
+      "tags": [
+        "SQL",
+        "JOIN"
+      ]
     },
     {
       "file": "02-normalisierung.mp4",
       "title": "Normalisierung: 1. bis 3. NF",
       "description": "Eine Bestelltabelle Schritt für Schritt normalisieren – und welche Anomalien dabei verschwinden.",
       "deck": "datenmodellierung",
-      "tags": ["Normalisierung", "Datenbank"]
+      "tags": [
+        "Normalisierung",
+        "Datenbank"
+      ]
     },
     {
       "file": "03-pseudocode-arrays.mp4",
       "title": "Pseudocode mit Arrays",
       "description": "Summe, Mittelwert, Maximum und Suche mit einer Schleife – inklusive typischer Indexfehler.",
       "deck": "algorithmen",
-      "tags": ["Pseudocode", "Array"]
+      "tags": [
+        "Pseudocode",
+        "Array"
+      ]
     },
     {
       "file": "04-uml-klassendiagramm.mp4",
       "title": "UML-Klassendiagramm",
       "description": "Sichtbarkeiten, Multiplizitäten, Aggregation vs. Komposition, Vererbung und Interfaces.",
       "deck": "uml-bpmn",
-      "tags": ["UML", "Klassendiagramm"]
+      "tags": [
+        "UML",
+        "Klassendiagramm"
+      ]
     },
     {
       "file": "05-uml-sequenzdiagramm.mp4",
       "title": "UML-Sequenzdiagramm",
       "description": "Lebenslinien, Nachrichten und die Fragmente alt, opt und loop an einem Beispiel.",
       "deck": "uml-bpmn",
-      "tags": ["UML", "Sequenzdiagramm"]
+      "tags": [
+        "UML",
+        "Sequenzdiagramm"
+      ]
     },
     {
       "file": "06-bubblesort.mp4",
       "title": "Bubblesort in 60 Sekunden",
       "description": "Durchlauf für Durchlauf vergleichen und tauschen, dazu der Pseudocode und O(n²).",
       "deck": "algorithmen",
-      "tags": ["Sortieren", "Algorithmus"]
+      "tags": [
+        "Sortieren",
+        "Algorithmus"
+      ]
+    },
+    {
+      "file": "07-sql-group-by-having.mp4",
+      "title": "GROUP BY & HAVING",
+      "description": "Gruppen bilden, pro Gruppe rechnen und Gruppen filtern – plus WHERE vs. HAVING und die Ausführungsreihenfolge.",
+      "deck": "sql",
+      "tags": [
+        "SQL",
+        "GROUP BY",
+        "HAVING"
+      ]
+    },
+    {
+      "file": "08-uml-aktivitaetsdiagramm.mp4",
+      "title": "UML-Aktivitätsdiagramm",
+      "description": "Start- und Endknoten, Aktionen, Entscheidungen mit [Bedingungen], Gabelung/Vereinigung und Schwimmbahnen.",
+      "deck": "uml-bpmn",
+      "tags": [
+        "UML",
+        "Aktivitätsdiagramm"
+      ]
+    },
+    {
+      "file": "09-blackbox-testfaelle.mp4",
+      "title": "Black-Box-Test: Äquivalenzklassen & Grenzwerte",
+      "description": "Testfälle systematisch finden: gültige/ungültige Klassen, Vertreter, Grenzwerte und die Testfalltabelle.",
+      "deck": "qualitaet-test",
+      "tags": [
+        "Testen",
+        "Äquivalenzklassen",
+        "Grenzwerte"
+      ]
+    },
+    {
+      "file": "10-design-patterns.mp4",
+      "title": "Singleton & Observer",
+      "description": "Privater Konstruktor und statische getInstanz() – und wie ein Subjekt seine Beobachter benachrichtigt.",
+      "deck": "oop-patterns",
+      "tags": [
+        "Design Pattern",
+        "Singleton",
+        "Observer"
+      ]
+    },
+    {
+      "file": "11-hybride-verschluesselung.mp4",
+      "title": "Hybride Verschlüsselung",
+      "description": "Symmetrisch vs. asymmetrisch, Sitzungsschlüssel in drei Schritten – und warum die Signatur andersherum läuft.",
+      "deck": "it-sicherheit",
+      "tags": [
+        "Kryptografie",
+        "AES",
+        "RSA",
+        "TLS"
+      ]
     }
   ]
 }
