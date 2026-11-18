@@ -1,0 +1,62 @@
+# Sprechertexte für Gemini-TTS: je Video eine Liste, ein Eintrag pro Szene (gleiche Reihenfolge wie SEG).
+N = {
+'07': [
+ "Gruppieren in SQL: GROUP BY und HAVING. Das kommt in fast jeder AP2-Prüfung dran.",
+ "Wir starten mit einer Tabelle Bestellung. Jede Zeile hat einen Kunden und einen Betrag.",
+ "GROUP BY Kunde fasst alle Zeilen mit demselben Kunden zu einer Gruppe zusammen.",
+ "Die Aggregatfunktion SUM rechnet dann pro Gruppe. Aus fünf Zeilen werden drei.",
+ "Wichtige Regel: Jede Spalte im SELECT steht entweder im GROUP BY, oder in einer Aggregatfunktion.",
+ "Mit HAVING filterst du ganze Gruppen. HAVING SUM größer dreißig lässt nur Anna und Ben übrig.",
+ "Merk dir den Unterschied: WHERE filtert einzelne Zeilen, und zwar vor dem Gruppieren. HAVING filtert Gruppen, danach.",
+ "Die Reihenfolge der Ausführung: FROM, WHERE, GROUP BY, HAVING, SELECT, und zum Schluss ORDER BY.",
+ "Deshalb kennt WHERE einen Alias aus dem SELECT noch gar nicht.",
+ "Typischer Prüfungsfehler: eine Aggregatfunktion im WHERE. Das ist falsch. Dafür gibt es HAVING.",
+],
+'08': [
+ "Das UML-Aktivitätsdiagramm. Seit dem neuen Prüfungskatalog ein echtes Pflichtthema.",
+ "Es zeigt einen Ablauf, also was nacheinander passiert. Jeder Ablauf beginnt mit einem ausgefüllten Kreis, dem Startknoten.",
+ "Die Schritte heißen Aktionen. Man zeichnet sie als Rechtecke mit stark abgerundeten Ecken.",
+ "Eine Raute ist ein Entscheidungsknoten. An den ausgehenden Kanten stehen Bedingungen in eckigen Klammern, die sogenannten Guards.",
+ "Danach führt ein Verbindungsknoten, wieder eine Raute, die Zweige zusammen.",
+ "Parallele Abläufe zeigt ein schwarzer Balken. Die Gabelung teilt den Fluss, die Vereinigung wartet, bis alle Zweige fertig sind.",
+ "Am Ende steht der Endknoten: ein Kreis mit Punkt. Er beendet die gesamte Aktivität.",
+ "Nicht verwechseln: Der Kreis mit Kreuz ist ein Ablaufende. Er beendet nur diesen einen Zweig, nicht alles.",
+ "Mit Schwimmbahnen, auch Partitionen genannt, zeigst du, wer welche Aktion ausführt. Zum Beispiel Kunde, Shop und Lager.",
+ "Prüfungstipps: genau ein Startknoten, Bedingungen immer in eckigen Klammern, und jede Gabelung braucht ihre Vereinigung.",
+],
+'09': [
+ "Testfälle finden mit Äquivalenzklassen und Grenzwerten. So geht Black-Box-Testen in der AP2.",
+ "Beim Black-Box-Test kennst du den Code nicht. Du testest nur gegen die Anforderung: Eingabe rein, Ausgabe prüfen.",
+ "Beispiel: Ein Online-Shop erlaubt Kunden von achtzehn bis fünfundsechzig Jahren. Welche Werte testest du?",
+ "Äquivalenzklassen teilen alle Eingaben in Gruppen, die sich gleich verhalten. Hier gibt es eine gültige und zwei ungültige Klassen.",
+ "Aus jeder Klasse reicht ein Vertreter, zum Beispiel zehn, vierzig und siebzig. Funktioniert einer, gilt das für die ganze Klasse.",
+ "Fehler passieren aber gern an den Rändern, zum Beispiel größer statt größer gleich. Deshalb kommen Grenzwerte dazu.",
+ "Teste direkt an jeder Grenze und knapp daneben: siebzehn, achtzehn, fünfundsechzig und sechsundsechzig.",
+ "In der Prüfung schreibst du das als Testfalltabelle: Eingabe, erwartetes Ergebnis, und welche Klasse oder Grenze geprüft wird.",
+ "Wichtig: Das erwartete Ergebnis legst du vorher aus der Anforderung fest, nicht erst, nachdem du das Programm ausprobiert hast.",
+],
+'10': [
+ "Zwei Entwurfsmuster, die in der AP2 immer wieder auftauchen: Singleton und Observer.",
+ "Das Singleton sorgt dafür, dass es von einer Klasse genau ein Objekt gibt. Typisch für einen Logger oder eine Datenbankverbindung.",
+ "Der Trick: Der Konstruktor ist privat. Von außen kann also niemand mit new ein zweites Objekt erzeugen.",
+ "Stattdessen gibt es eine statische Methode getInstanz. Statisch erkennst du im UML-Diagramm am Unterstrich.",
+ "Beim ersten Aufruf wird das Objekt erzeugt, danach wird immer dasselbe zurückgegeben.",
+ "Das Observer-Muster: Ein Subjekt benachrichtigt automatisch alle angemeldeten Beobachter, sobald sich etwas ändert.",
+ "Konkrete Beobachter, etwa eine App und ein Display, implementieren das Interface. Das zeichnest du mit gestrichelter Linie und hohlem Dreieck.",
+ "Benachrichtigen geht einfach die Liste durch und ruft bei jedem Beobachter aktualisieren auf.",
+ "Der Vorteil: lose Kopplung. Die Wetterstation kennt nur das Interface, neue Beobachter kommen ohne Änderung dazu.",
+],
+'11': [
+ "Hybride Verschlüsselung: So schützt HTTPS deine Daten. In drei Schritten.",
+ "Symmetrisch heißt: ein gemeinsamer Schlüssel zum Ver- und Entschlüsseln, zum Beispiel AES. Das ist schnell. Aber wie kommt der Schlüssel sicher zum Empfänger?",
+ "Asymmetrisch heißt: ein Schlüsselpaar, zum Beispiel RSA. Mit dem Public Key verschlüsselt jeder, entschlüsseln kann nur der Private Key. Sicher, aber langsam.",
+ "Hybrid kombiniert beides. Schritt eins: Der Sender erzeugt einen zufälligen Sitzungsschlüssel und verschlüsselt damit die Daten symmetrisch.",
+ "Schritt zwei: Den kleinen Sitzungsschlüssel verschlüsselt er asymmetrisch, mit dem Public Key des Empfängers.",
+ "Beides wird verschickt. Schritt drei: Der Empfänger entschlüsselt mit seinem Private Key den Sitzungsschlüssel, und damit dann die Daten.",
+ "So bekommst du das Beste aus beiden Welten: sicheren Schlüsselaustausch und schnelle Verschlüsselung großer Datenmengen. Genau so arbeitet TLS.",
+ "Prüfungsfalle: Bei der digitalen Signatur ist es umgekehrt. Der Sender signiert mit seinem Private Key, geprüft wird mit seinem Public Key.",
+],
+}
+if __name__ == '__main__':
+    import sys
+    print(' <long pause> '.join(N[sys.argv[1]]))
