@@ -87,6 +87,38 @@ with sync_playwright() as p:
     shot("11-search")
     pg.goto(base + "#/info")
     shot("12-info")
+
+    # ---- Shorts: Videoordner simulieren (Manifest-Video + unbekannte Datei) ----
+    demo = (ROOT / "scripts/fixtures/demo-short.mp4").read_bytes()
+    listing = '<a href="01-sql-joins.mp4">x</a><a href="99-eigenes_video.mp4">y</a>'
+    pg.route("**/ui/shorts/", lambda r: r.fulfill(status=200, content_type="text/html", body=listing))
+    pg.route("**/ui/shorts/*.mp4", lambda r: r.fulfill(status=200, content_type="video/mp4", body=demo))
+    pg.evaluate("localStorage.setItem('lk-shorts-muted','true')")
+    pg.goto(base + "#/")
+    pg.reload()
+    pg.wait_for_selector(".shortsteaser")
+    shot("13-home-shorts")
+    pg.click(".shortsteaser")
+    pg.wait_for_selector(".short[data-i] video")
+    pg.wait_for_function("document.querySelector('.short[data-i] video').currentTime > 0.3", timeout=10000)
+    shot("14-shorts-feed")
+    assert pg.locator(".short[data-i]").count() == 2, "erwartet 2 Shorts im Feed"
+    pg.click(".short[data-i='0'] [data-like]")
+    pg.wait_for_selector(".short[data-i='0'] [data-like].on")
+    # bis zum Ende laufen lassen → „gesehen“ + automatisch zum nächsten
+    pg.wait_for_function("JSON.parse(localStorage.getItem('lk-mock')).shorts?.['01-sql-joins']?.seen === true", timeout=15000)
+    pg.wait_for_function("document.querySelector('#feed').scrollTop > 100", timeout=8000)
+    shot("15-shorts-next")
+    pg.click("[data-f=liked]")
+    pg.wait_for_selector("[data-f=liked].on")
+    pg.wait_for_selector(".short[data-i]")
+    assert pg.locator(".short[data-i]").count() == 1, "Merkliste sollte 1 Short enthalten"
+    pg.goto(base + "#/deck/sql")
+    pg.wait_for_selector(".shortsteaser")
+    shot("16-deck-shorts")
+    pg.goto(base + "#/shorts?deck=algorithmen")
+    pg.wait_for_selector(".endcard")
+    shot("17-shorts-upcoming")
     b.close()
 
 srv.shutdown()

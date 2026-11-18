@@ -14,6 +14,8 @@ Karteikarten-App (Android-APK) in **Rust + Tauri 2**, UI in Vanilla-JS ohne Buil
 | `src-tauri/src/lib.rs` | Tauri-Commands (dünn, rufen nur `store`/`schedule`) |
 | `ui/app.js` | Router + alle Screens; `ui/md.js` Mini-Markdown; `ui/ink.js` Markieren/Stift; `ui/api.js` Tauri-Bridge + Browser-Mock |
 | `content/decks/NN-name.json` | Lerninhalte, ein Deck pro Datei (Schema: `content/README.md`) |
+| `crates/core/src/shorts.rs` | Lern-Shorts: Katalog (Manifest + Videodateien), Feed, Gesehen/Gemerkt |
+| `ui/shorts.js` | Shorts-Feed (Scroll-Snap, Autoplay, Blob-Fallback); Videos in `ui/shorts/`, Metadaten in `content/shorts.json` |
 | `.github/workflows/android.yml` | APK bauen, signieren, Release |
 
 ## Befehle
@@ -28,4 +30,5 @@ Karteikarten-App (Android-APK) in **Rust + Tauri 2**, UI in Vanilla-JS ohne Buil
 - Neuer Command: Funktion in `store.rs` + Test → Wrapper in `src-tauri/src/lib.rs` + `generate_handler!` → Aufruf `call('name', {camelCaseArgs})` in `app.js` → Mock in `api.js`.
 - Neue Inhalte: Datei in `content/decks/` ablegen; Karten-ID = Hash(Deck-ID + Vorderseite) → Vorderseite ändern = neue Karte (Fortschritt weg), Rückseite ändern = Update mit Fortschritt.
 - Inhalte nur nach aktuellem AP2-Katalog (Stand 2025): kein Struktogramm/PAP; AP1-Überschneidungen mit Tag `AP1`.
+- Shorts: Video nach `ui/shorts/` (wird mit der App ausgeliefert, CI komprimiert), Eintrag in `content/shorts.json` (`file`, `title`, `description`, `deck` = Deck-ID, `tags`). Test `shorts_manifest_is_valid` prüft Deck-IDs.
 - Version: `src-tauri/tauri.conf.json` + `Cargo.toml` (workspace). versionCode setzt die CI.

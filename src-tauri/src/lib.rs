@@ -2,6 +2,7 @@
 use lernkartei_core::{
     import,
     schedule::{self, Mode, StudyCard},
+    shorts::{self, Feed, Filter, Short},
     store::{self, CardInput, DeckInput, MergeReport, Overview},
     Card, Deck, Ink, Library, Rating,
 };
@@ -12,6 +13,7 @@ use tauri::{Manager, State};
 struct App {
     lib: Library,
     path: PathBuf,
+    shorts: Vec<Short>,
 }
 
 type S<'a> = State<'a, Mutex<App>>;
@@ -34,6 +36,15 @@ fn mutate<T>(s: &S, f: impl FnOnce(&mut Library) -> R<T>) -> R<T> {
 
 fn read<T>(s: &S, f: impl FnOnce(&Library) -> T) -> R<T> {
     Ok(f(&s.lock().map_err(|e| e.to_string())?.lib))
+}
+
+/// Wie `mutate`, aber mit Zugriff auf den Shorts-Katalog.
+fn mutate_shorts<T>(s: &S, f: impl FnOnce(&mut Library, &[Short]) -> R<T>) -> R<T> {
+    let mut app = s.lock().map_err(|e| e.to_string())?;
+    let App { lib, path, shorts } = &mut *app;
+    let out = f(lib, shorts)?;
+    store::save(path, lib).map_err(|e| format!("Speichern fehlgeschlagen: {e}"))?;
+    Ok(out)
 }
 
 #[tauri::command]
@@ -180,6 +191,37 @@ fn restore_builtin(s: S) -> R<MergeReport> {
     mutate(&s, |l| Ok(store::merge_builtin(l, true)))
 }
 
+#[tauri::command]
+fn shorts_feed(s: S, filter: Filter, deck: Option<String>, shuffle: bool) -> R<Feed> {
+    let app = s.lock().map_err(|e| e.to_string())?;
+    let seed = shuffle.then(|| now() as u64 ^ 0x2545_f491_4f6c_dd1d);
+    Ok(shorts::feed(
+        &app.lib,
+        &app.shorts,
+        filter,
+        deck.as_deref(),
+        seed,
+    ))
+}
+
+#[tauri::command]
+fn short_seen(s: S, id: String) -> R<()> {
+    mutate_shorts(&s, |l, c| shorts::mark_seen(l, c, &id, now()))
+}
+
+#[tauri::command]
+fn short_like(s: S, id: String) -> R<bool> {
+    mutate_shorts(&s, |l, c| shorts::toggle_like(l, c, &id))
+}
+
+#[tauri::command]
+fn shorts_reset(s: S) -> R<()> {
+    mutate(&s, |l| {
+        shorts::reset_seen(l);
+        Ok(())
+    })
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -193,7 +235,11 @@ pub fn run() {
                 .unwrap_or_default();
             store::merge_builtin(&mut lib, false);
             store::save(&path, &lib)?;
-            app.manage(Mutex::new(App { lib, path }));
+            app.manage(Mutex::new(App {
+                lib,
+                path,
+                shorts: shorts::catalog(),
+            }));
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
@@ -213,7 +259,11 @@ pub fn run() {
             export_json,
             search,
             reset_progress,
-            restore_builtin
+            restore_builtin,
+            shorts_feed,
+            short_seen,
+            short_like,
+            shorts_reset
         ])
         .run(tauri::generate_context!())
         .expect("Fehler beim Starten von LernKartei");

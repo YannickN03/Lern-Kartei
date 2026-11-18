@@ -1719,7 +1719,7 @@ dependencies = [
 
 [[package]]
 name = "lernkartei"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "lernkartei-core",
  "serde",
@@ -1732,7 +1732,7 @@ dependencies = [
 
 [[package]]
 name = "lernkartei-core"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "serde",
  "serde_json",

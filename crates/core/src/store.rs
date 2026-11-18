@@ -6,6 +6,11 @@ use std::path::Path;
 
 include!(concat!(env!("OUT_DIR"), "/builtin.rs"));
 
+/// Eingebettetes Shorts-Manifest + Videodateien aus `ui/shorts/` (für [`crate::shorts`]).
+pub(crate) fn shorts_sources() -> (&'static str, &'static [&'static str]) {
+    (SHORTS_MANIFEST, SHORT_FILES)
+}
+
 /// Liest die Bibliothek; fehlt die Datei, wird eine leere angelegt.
 pub fn load(path: &Path) -> std::io::Result<Library> {
     match std::fs::read_to_string(path) {
