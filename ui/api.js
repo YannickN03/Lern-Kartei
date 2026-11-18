@@ -31,7 +31,19 @@ const API = (() => {
     } catch (e) { console.warn(e); }
     save();
   }
-  const ready = init();
+  // Shorts: Manifest + Videoordner (Verzeichnisliste von python -m http.server)
+  let shortsCat = [];
+  async function initShorts() {
+    const title = f => { const t = f.replace(/\.[^.]+$/, '').replace(/^[\d_-]+/, '').replace(/[-_]+/g, ' ').trim(); return t ? t[0].toUpperCase() + t.slice(1) : f; };
+    const id = f => f.replace(/\.[^.]+$/, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    let man = [], files = [];
+    try { man = (await (await fetch('../content/shorts.json')).json()).shorts || []; } catch { /* kein Manifest */ }
+    try { files = [...(await (await fetch('shorts/')).text()).matchAll(/href="([^"?]+\.(?:mp4|m4v|webm))"/gi)].map(m => decodeURIComponent(m[1])); } catch { /* kein Ordner */ }
+    const has = f => files.some(x => x.toLowerCase() === f.toLowerCase());
+    shortsCat = man.map(s => ({ ...s, id: s.id || id(s.file), title: s.title || title(s.file), tags: s.tags || [], description: s.description || '', deck: s.deck || '', available: has(s.file) }));
+    files.filter(f => !shortsCat.some(s => s.file.toLowerCase() === f.toLowerCase())).forEach(f => shortsCat.push({ id: id(f), file: f, title: title(f), description: '', deck: '', tags: [], available: true }));
+  }
+  const ready = init().then(initShorts);
   const D = id => lib.decks.find(d => d.id === id);
   const C = (d, c) => D(d).cards.find(x => x.id === c);
   const due = c => c.progress.rating === 'new' || c.progress.due <= today();
@@ -82,6 +94,23 @@ const API = (() => {
     search: a => { const q = a.query.toLowerCase(); return lib.decks.flatMap(d => d.cards.filter(c => (c.front + c.back + c.tags.join()).toLowerCase().includes(q)).map(c => sc(d, c))).slice(0, 200); },
     reset_progress: a => lib.decks.filter(d => !a.deck || d.id === a.deck).forEach(d => d.cards.forEach(c => (c.progress = prog()))),
     restore_builtin: () => { localStorage.removeItem(KEY); location.reload(); },
+    shorts_feed: a => {
+      const st = lib.shorts || {};
+      const out = { items: [], total: 0, seen: 0, upcoming: [] };
+      for (const s of shortsCat.filter(s => !a.deck || s.deck === a.deck)) {
+        if (!s.available) { out.upcoming.push(s); continue; }
+        const x = st[s.id] || {}; out.total++; out.seen += !!x.seen;
+        if ((a.filter === 'new' && x.seen) || (a.filter === 'liked' && !x.liked)) continue;
+        const d = D(s.deck);
+        out.items.push({ ...s, seen: !!x.seen, liked: !!x.liked, views: x.views || 0, deck_name: d ? d.name : '', deck_icon: d ? d.icon : '' });
+      }
+      if (a.shuffle) out.items.sort(() => Math.random() - .5);
+      out.items.sort((p, q) => p.seen - q.seen);
+      return out;
+    },
+    short_seen: a => { const x = ((lib.shorts ||= {})[a.id] ||= {}); x.seen = true; x.views = (x.views || 0) + 1; },
+    short_like: a => { const x = ((lib.shorts ||= {})[a.id] ||= {}); return (x.liked = !x.liked); },
+    shorts_reset: () => { lib.shorts = Object.fromEntries(Object.entries(lib.shorts || {}).filter(([, x]) => x.liked).map(([k, x]) => [k, { ...x, seen: false, views: 0 }])); },
   };
   async function call(cmd, args) {
     await ready;

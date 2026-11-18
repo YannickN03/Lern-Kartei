@@ -91,10 +91,14 @@ async function imageToDataUrl(bytes) {
 // ---------- Router ----------
 const routes = {
   '': home, deck: deckView, study: studyView, edit: editView, deckedit: deckEditView,
-  import: importView, search: searchView, more: moreView, info: infoView,
+  import: importView, search: searchView, more: moreView, info: infoView, shorts: shortsView,
 };
+// Aufräumen beim Verlassen eines Screens (z. B. Videos stoppen)
+let leaveFns = [];
+const onLeave = fn => leaveFns.push(fn);
 async function route() {
   closeSheet();
+  leaveFns.splice(0).forEach(fn => { try { fn(); } catch (e) { console.warn(e); } });
   const [path, query] = location.hash.replace(/^#\/?/, '').split('?');
   const [name, ...args] = path.split('/').map(decodeURIComponent);
   const params = Object.fromEntries(new URLSearchParams(query || ''));
@@ -145,6 +149,21 @@ async function home() {
   $('[data-q=due]').onclick = () => startStudy([], 'due', false, 0);
   $('[data-q=weak]').onclick = () => startStudy([], 'weak', true, 0);
   $('[data-q=mix]').onclick = () => startStudy([], 'all', true, 20);
+  shortsTeaser($('.quick'), null);
+}
+
+// Hinweis auf Shorts (Start: alle, Deck: nur passende); erscheint nur, wenn es Videos gibt.
+async function shortsTeaser(after, deck) {
+  try {
+    const f = await call('shorts_feed', { filter: 'all', deck, shuffle: false });
+    if (!f.total || !after.isConnected) return;
+    const n = f.total - f.seen;
+    const b = document.createElement('button');
+    b.className = 'shortsteaser full';
+    b.innerHTML = `<span>🎬</span><span class="grow"><b>Lern-Shorts${deck ? ' zum Thema' : ''}</b><br><small>${f.total} Video${f.total === 1 ? '' : 's'} · ${n ? n + ' neu' : 'alle gesehen'}</small></span><span>▶</span>`;
+    b.onclick = () => go('#/shorts' + (deck ? '?deck=' + encodeURIComponent(deck) : ''));
+    after.after(b);
+  } catch (e) { console.warn(e); }
 }
 
 function studySheet(deckIds, title) {
@@ -182,6 +201,7 @@ async function deckView([id], params) {
         ${x.flagged ? '⭐' : ''}${x.image ? '🖼️' : ''}</div>`).join('') || '<p class="empty">Keine Karten in diesem Stapel.</p>'}</div>`;
   $$('[data-f]').forEach(b => (b.onclick = () => go(`#/deck/${encodeURIComponent(id)}?f=${b.dataset.f}`)));
   $('#learn').onclick = () => studySheet([id], d.name);
+  shortsTeaser($('#learn').parentElement, id);
   $('#add').onclick = () => go('#/edit/' + encodeURIComponent(id));
   $$('[data-c]').forEach(el => (el.onclick = () => cardSheet(d, d.cards.find(x => x.id === el.dataset.c))));
   $('#menu').onclick = () => sheet(`<h2>${esc(d.name)}</h2><div class="stack">
@@ -501,17 +521,20 @@ function moreView() {
       <button data-a="deck">➕ Neues Deck / Kategorie</button>
       <button data-a="export">📤 Alles exportieren (Backup)</button>
       <button data-a="restore">♻️ Standard-Inhalte wiederherstellen</button>
+      <button data-a="shorts">🎬 Shorts: „gesehen“ zurücksetzen</button>
       <button class="danger" data-a="reset">↺ Gesamten Lernfortschritt zurücksetzen</button>
     </div>
     <h2>So funktioniert's</h2>
     <p class="muted">Jede Karte landet nach dem Umdrehen in einem von drei Stapeln: <b style="color:var(--kann)">Kann ich</b>, <b style="color:var(--geht)">Geht so</b> oder <b style="color:var(--nicht)">Nicht</b>. Dahinter steckt ein Leitner-System: „Kann ich“ schiebt die Karte ein Fach weiter (Wiederholung nach 1, 3, 7, 14, 30 Tagen), „Geht so“ kommt morgen wieder, „Nicht“ noch in derselben Runde.</p>
+    <p class="muted">🎬 <b>Shorts</b>: kurze Lernvideos zum Durchwischen. Tippen = Pause, Doppeltippen = merken ❤️, ⏩ ändert das Tempo, 📚 springt zu den passenden Karten.</p>
     <p class="muted">Im Lernmodus: 🖍️ Wörter antippen/überstreichen zum Markieren (3 Farben), ✏️ frei zeichnen, 🧽 radieren. Markierungen werden pro Karte gespeichert.</p>
     <p class="muted">Alle Daten liegen nur auf deinem Gerät. Regelmäßig exportieren = Backup.</p>
-    <p class="muted">LernKartei 0.1 · Open Source · <a href="https://github.com/YannickN03/Lern-Kartei">GitHub</a>${API.mock ? ' · <b>Browser-Vorschau</b>' : ''}</p>`;
+    <p class="muted">LernKartei 0.2 · Open Source · <a href="https://github.com/YannickN03/Lern-Kartei">GitHub</a>${API.mock ? ' · <b>Browser-Vorschau</b>' : ''}</p>`;
   $('[data-a=info]').onclick = () => go('#/info');
   $('[data-a=deck]').onclick = () => go('#/deckedit');
   $('[data-a=export]').onclick = () => exportSheet([], 'alles');
   $('[data-a=restore]').onclick = async () => { const r = await safe(call('restore_builtin')); toast(`✓ ${r.cards_added} Karten ergänzt, ${r.cards_updated} aktualisiert`); };
+  $('[data-a=shorts]').onclick = async () => { await safe(call('shorts_reset'), 'Shorts wieder als neu markiert'); };
   $('[data-a=reset]').onclick = () => confirmSheet('Wirklich den gesamten Lernfortschritt löschen? Karten bleiben erhalten.', 'Alles zurücksetzen', async () => { await safe(call('reset_progress', { deck: null }), 'Zurückgesetzt'); });
 }
 

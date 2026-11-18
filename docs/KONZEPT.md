@@ -21,6 +21,9 @@ Offline-Karteikarten-App für Android zum Lernen für die **AP2 Fachinformatiker
 - **Lernmodi**: Fällig, Alle, Schwächen, Neu, nur Nicht/Geht so/Kann ich, Gemerkte ⭐; mischen, Anzahl begrenzen; Kategorie- oder Gesamtlernen.
 - **Import**: JSON/CSV/TSV/TXT/MD per Datei oder Einfügen; **JSON-Vorlage** für neue Karten. **Export** als JSON (mit oder ohne Fortschritt) = Backup.
 - **Suche**, Tagesserie, Fortschrittsring, Prüfungsinfo-Seite.
+- **Lern-Shorts**: kurze Hochkant-Videos (aus NotebookLM „Video-Zusammenfassung → Kurz“) im Reels-Stil: Wischen zum nächsten Video, Autoplay, Tippen = Pause, Doppeltippen = merken, Tempo 1–2×, Verknüpfung zum passenden Deck. Ungesehene zuerst; „gesehen“ ab 85 % Laufzeit.
+  - Videos liegen in `ui/shorts/` und sind Teil der App (offline). Manifest `content/shorts.json` liefert Titel/Deck; Dateien ohne Eintrag erscheinen mit Titel aus dem Dateinamen, Einträge ohne Datei als „Video folgt“.
+  - Wiedergabe direkt aus den App-Assets; falls die WebView das nicht kann, Fallback über Blob-URL. Die CI rechnet Videos vor dem Build auf max. 720p/H.264 mit Fast-Start herunter.
 
 ## Architektur
 ```

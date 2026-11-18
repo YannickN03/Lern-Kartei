@@ -205,3 +205,96 @@ fn edit_card_marks_builtin_as_edited() {
     assert_eq!(lib.card_mut(&d, &c.id).unwrap().back, "Neu");
     assert!(!store::search(&lib, "neu", 10).is_empty());
 }
+
+// ---------- Shorts ----------
+use lernkartei_core::shorts::{self, Filter};
+
+const MANIFEST: &str = r#"{"shorts":[
+  {"file":"01-sql.mp4","title":"SQL","deck":"sql","tags":["SQL"]},
+  {"file":"02-uml.mp4","deck":"uml-bpmn"},
+  {"file":"03-fehlt.mp4","title":"Kommt noch","deck":"sql"}
+]}"#;
+
+#[test]
+fn shorts_manifest_is_valid() {
+    let decks = store::builtin_decks();
+    let cat = shorts::catalog();
+    let mut ids = HashSet::new();
+    for s in &cat {
+        assert!(ids.insert(s.id.clone()), "doppelte Short-ID {}", s.id);
+        assert!(!s.title.is_empty(), "{}: Titel fehlt", s.id);
+        assert!(!s.file.is_empty(), "{}: Datei fehlt", s.id);
+        assert!(
+            s.deck.is_empty() || decks.iter().any(|d| d.id == s.deck),
+            "{}: unbekanntes Deck {}",
+            s.id,
+            s.deck
+        );
+    }
+}
+
+#[test]
+fn shorts_catalog_merges_manifest_and_files() {
+    let cat =
+        shorts::catalog_from(MANIFEST, &["01-sql.mp4", "02-UML.mp4", "07-mein_video.mp4"]).unwrap();
+    let ids: Vec<_> = cat.iter().map(|s| (s.id.as_str(), s.available)).collect();
+    assert_eq!(
+        ids,
+        [
+            ("01-sql", true),
+            ("02-uml", true),
+            ("03-fehlt", false),
+            ("07-mein-video", true)
+        ]
+    );
+    assert_eq!(cat[1].title, "Uml");
+    assert_eq!(cat[3].title, "Mein video");
+    assert!(shorts::catalog_from("{kaputt", &[]).is_err());
+    assert!(shorts::catalog_from("", &[]).unwrap().is_empty());
+}
+
+#[test]
+fn shorts_feed_progress_and_filters() {
+    let mut lib = Library::default();
+    store::merge_builtin(&mut lib, false);
+    let cat = shorts::catalog_from(MANIFEST, &["01-sql.mp4", "02-uml.mp4"]).unwrap();
+
+    let f = shorts::feed(&lib, &cat, Filter::All, None, None);
+    assert_eq!(
+        (f.total, f.seen, f.items.len(), f.upcoming.len()),
+        (2, 0, 2, 1)
+    );
+    assert_eq!(f.items[0].deck_name, "SQL");
+
+    shorts::mark_seen(&mut lib, &cat, "01-sql", NOW).unwrap();
+    assert!(shorts::mark_seen(&mut lib, &cat, "gibtsnicht", NOW).is_err());
+    let f = shorts::feed(&lib, &cat, Filter::All, None, None);
+    assert_eq!(f.seen, 1);
+    assert_eq!(f.items[0].short.id, "02-uml", "ungesehene zuerst");
+    assert_eq!(
+        shorts::feed(&lib, &cat, Filter::New, None, None)
+            .items
+            .len(),
+        1
+    );
+
+    assert!(shorts::toggle_like(&mut lib, &cat, "02-uml").unwrap());
+    let liked = shorts::feed(&lib, &cat, Filter::Liked, None, None);
+    assert_eq!(liked.items.len(), 1);
+    assert!(liked.items[0].liked);
+
+    let sql = shorts::feed(&lib, &cat, Filter::All, Some("sql"), Some(42));
+    assert_eq!((sql.items.len(), sql.upcoming.len()), (1, 1));
+
+    // Speichern/Laden behält den Zustand, alte Dateien ohne `shorts` laden weiter
+    let json = serde_json::to_string(&lib).unwrap();
+    let back: Library = serde_json::from_str(&json).unwrap();
+    assert_eq!(back.shorts, lib.shorts);
+    let old: Library = serde_json::from_str(r#"{"version":1,"decks":[]}"#).unwrap();
+    assert!(old.shorts.is_empty());
+
+    shorts::reset_seen(&mut lib);
+    let f = shorts::feed(&lib, &cat, Filter::All, None, None);
+    assert_eq!(f.seen, 0);
+    assert!(f.items.iter().any(|i| i.liked), "Merkliste bleibt");
+}

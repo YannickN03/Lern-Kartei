@@ -15,6 +15,7 @@ APK auf dem Handy öffnen → „Installation aus unbekannten Quellen“ erlaube
 - **Lernkategorien** und Decks, eigene Karten mit Code, Tabellen, Listen und **Bildern**
 - **Import** von JSON, CSV/TSV, Text, Markdown · **Export/Backup** als JSON · JSON-Vorlage für neue Karten
 - Lernmodi: fällig, alle, Schwächen, neue, gemerkte ⭐ – gemischt oder sortiert
+- 🎬 **Lern-Shorts**: kurze Hochkant-Lernvideos (NotebookLM) zum Durchwischen – Autoplay, Merken ❤️, Tempo bis 2×, direkt zu den passenden Karten
 - Suche, Tagesserie, Prüfungsinfo, komplett offline
 
 ## Inhalte (AP2 FIAE)
@@ -26,6 +27,9 @@ APK auf dem Handy öffnen → „Installation aus unbekannten Quellen“ erlaube
 | WiSo | Ausbildung, Arbeitsrecht, Mitbestimmung, Sozialversicherung, Verträge, Rechtsformen, Nachhaltigkeit, DSGVO, Lizenzen, Kalkulation |
 | Projekt & Präsentation | Projektantrag, Doku, Präsentation, Fachgespräch |
 | AP1 → AP2 | Rechenaufgaben und Grundlagen aus AP1, die in AP2 wiederkommen |
+
+### Lern-Shorts hinzufügen
+Video (`.mp4`, hochkant, z. B. NotebookLM → *Video-Zusammenfassung → Kurz*) nach [`ui/shorts/`](ui/shorts/) legen und committen. Mit dem Dateinamen aus [`content/shorts.json`](content/shorts.json) bekommt es Titel, Beschreibung und Deck; andere Namen funktionieren auch. Die CI verkleinert die Videos beim APK-Build automatisch.
 
 Struktur und Priorisierung orientieren sich an [ap2-fiae.de](https://www.ap2-fiae.de/). Angaben ohne Gewähr – maßgeblich ist der offizielle Prüfungskatalog. Format für eigene Karten: [`content/README.md`](content/README.md).
 

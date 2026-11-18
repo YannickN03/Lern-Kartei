@@ -115,3 +115,40 @@ mark, .w.m1 { background: #ffe45c; color: inherit; border-radius: 3px; }
 .info table { width: 100%; border-collapse: collapse; font-size: .9rem; } .info td, .info th { border-bottom: 1px solid var(--line); padding: 6px 4px; text-align: left; }
 .thumb { max-width: 140px; max-height: 100px; border-radius: 10px; }
 .empty { text-align: center; color: var(--muted); padding: 30px 0; }
+
+/* Shorts */
+:root { --tabh: calc(58px + var(--bottom)); }
+body.shortsmode { overflow: hidden; }
+body.shortsmode #view { padding: 0; max-width: none; }
+body.shortsmode #tabs { background: #000; }
+.shortsbar { position: fixed; top: 0; left: 0; right: 0; z-index: 5; display: flex; gap: 8px; align-items: center; padding: calc(var(--top) + 10px) 12px 18px; background: linear-gradient(rgba(0,0,0,.65), transparent); pointer-events: none; }
+.shortsbar > * { pointer-events: auto; } .shortsbar .chips { flex: 1; padding: 0; }
+.shortsbar .chips button { background: rgba(255,255,255,.14); backdrop-filter: blur(6px); } .shortsbar .chips button.on { background: #fff; color: #000; }
+.shortsbar .iconbtn { background: rgba(255,255,255,.14); } .shortsbar .iconbtn.on { background: var(--accent); }
+.shortsbar .pill { background: rgba(0,0,0,.5); color: #fff; }
+.feed { position: fixed; top: 0; left: 0; right: 0; bottom: var(--tabh); overflow-y: auto; scroll-snap-type: y mandatory; overscroll-behavior: contain; background: #000; scrollbar-width: none; }
+.feed::-webkit-scrollbar { display: none; }
+.short { position: relative; height: 100%; scroll-snap-align: start; scroll-snap-stop: always; overflow: hidden; background: #000; }
+.short video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: #000; }
+.short .tapzone { position: absolute; inset: 0; z-index: 1; }
+.short .playhint { position: absolute; left: 50%; top: 50%; translate: -50% -50%; z-index: 2; font-size: 2.6rem; width: 84px; height: 84px; border-radius: 50%; background: rgba(0,0,0,.45); display: none; place-items: center; padding-left: 6px; pointer-events: none; }
+.short.paused .playhint { display: grid; }
+.short .heart { position: absolute; left: 50%; top: 45%; translate: -50% -50%; z-index: 2; font-size: 5rem; opacity: 0; pointer-events: none; }
+.short .heart.pop { animation: heart .8s ease-out; }
+@keyframes heart { 0% { opacity: 0; transform: scale(.4); } 25% { opacity: 1; transform: scale(1.15); } 70% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1.3); } }
+.short .ov { position: absolute; left: 0; right: 72px; bottom: 14px; z-index: 3; padding: 0 14px; text-shadow: 0 1px 4px rgba(0,0,0,.8); max-width: 560px; }
+.short .ov h3 { margin: 6px 0 4px; font-size: 1.05rem; } .short .ov p { margin: 0 0 4px; font-size: .9rem; line-height: 1.35; opacity: .92; }
+.short .ov .tags { font-size: .82rem; color: var(--accent2); }
+.short::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 45%; background: linear-gradient(transparent, rgba(0,0,0,.7)); pointer-events: none; z-index: 1; }
+.deckchip { padding: 5px 10px; font-size: .8rem; border-radius: 99px; background: rgba(255,255,255,.18); backdrop-filter: blur(6px); }
+.short .side { position: absolute; right: 8px; bottom: 26px; z-index: 3; display: grid; gap: 10px; }
+.short .side button { flex-direction: column; gap: 0; width: 56px; padding: 6px 0; background: rgba(0,0,0,.35); border-radius: 16px; font-size: 1.45rem; }
+.short .side small { font-size: .62rem; opacity: .9; }
+.short .seek { position: absolute; left: 0; right: 0; bottom: 0; height: 14px; z-index: 4; display: flex; align-items: flex-end; touch-action: none; cursor: pointer; }
+.short .seek i { display: block; height: 3px; width: 0; background: #fff; border-radius: 0 2px 2px 0; }
+.short.broken::before { content: "⚠️ Video lässt sich nicht abspielen"; position: absolute; top: 45%; left: 0; right: 0; text-align: center; z-index: 2; color: var(--muted); }
+.endcard { display: grid; place-items: center; text-align: center; padding: 70px 22px 20px; overflow-y: auto; background: radial-gradient(circle at 50% 30%, #2b2147, #000 70%); }
+.endcard > div { max-width: 460px; width: 100%; } .endcard .big { font-size: 3rem; } .endcard .stack { margin-top: 12px; }
+.upcoming { text-align: left; margin-top: 18px; } .upcoming .item { cursor: default; }
+.shortsteaser { margin-top: 10px; text-align: left; gap: 12px; background: linear-gradient(135deg, #3a2470, #1d1a28); border: 1px solid var(--line); }
+.shortsteaser > span:first-child { font-size: 1.6rem; } .shortsteaser small { color: var(--muted); }

@@ -130,7 +130,7 @@ pub fn queue(
     out
 }
 
-fn shuffle<T>(v: &mut [T], seed: u64) {
+pub(crate) fn shuffle<T>(v: &mut [T], seed: u64) {
     let mut x = seed | 1;
     for i in (1..v.len()).rev() {
         x ^= x << 13;

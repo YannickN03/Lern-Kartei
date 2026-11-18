@@ -1,5 +1,6 @@
 //! Datenmodell. Alles ist serde-(de)serialisierbar; Felder mit `default` halten alte Dateien kompatibel.
 use serde::{Deserialize, Serialize};
+use std::collections::BTreeMap;
 
 /// Einsortierung einer Karte: Neu → Nicht / Geht so / Kann ich.
 #[derive(Serialize, Deserialize, Clone, Copy, Debug, PartialEq, Eq, Default, Hash)]
@@ -110,6 +111,22 @@ pub struct Library {
     pub version: u32,
     pub decks: Vec<Deck>,
     pub settings: Settings,
+    /// Fortschritt der Lern-Shorts (Schlüssel = Short-ID).
+    #[serde(skip_serializing_if = "BTreeMap::is_empty")]
+    pub shorts: BTreeMap<String, ShortState>,
+}
+
+/// Was der Nutzer mit einem Short gemacht hat.
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Default)]
+#[serde(default)]
+pub struct ShortState {
+    /// Mindestens einmal (fast) zu Ende geschaut.
+    pub seen: bool,
+    /// Gemerkt ❤️
+    pub liked: bool,
+    pub views: u32,
+    /// Zuletzt geschaut (Unix-Sekunden).
+    pub last: i64,
 }
 
 impl Library {
