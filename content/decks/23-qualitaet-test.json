@@ -1,0 +1,200 @@
+{
+  "id": "qualitaet-test",
+  "name": "Qualität & Testen",
+  "category": "Planen eines Softwareproduktes",
+  "description": "QS, ISO 25010, Teststufen, Testmethoden, TDD, Coverage, Usability",
+  "color": "#7ad3c4",
+  "icon": "✅",
+  "cards": [
+    {
+      "front": "Qualitätsmerkmale nach ISO/IEC 25010?",
+      "back": "Funktionale Eignung, Leistungseffizienz, Kompatibilität, Benutzbarkeit (Interaktionsfähigkeit), Zuverlässigkeit, Sicherheit, Wartbarkeit, Übertragbarkeit (Flexibilität). In der Version 2023 kam **Safety** (Betriebssicherheit) hinzu.",
+      "tags": [
+        "QS"
+      ],
+      "prio": 3
+    },
+    {
+      "front": "Analytische vs. konstruktive Qualitätssicherung?",
+      "back": "**Konstruktiv**: Fehler ==vermeiden== – Richtlinien, Coding Standards, Vorgehensmodelle, Schulungen, Frameworks.\n**Analytisch**: Fehler ==finden== – Tests (dynamisch), Reviews, statische Codeanalyse.",
+      "tags": [
+        "QS"
+      ],
+      "prio": 3
+    },
+    {
+      "front": "Statische vs. dynamische Tests?",
+      "back": "**Statisch**: Code wird ==nicht ausgeführt== – Code-Review, Walkthrough, Inspektion, Linter/statische Analyse.\n**Dynamisch**: Programm wird ausgeführt – Unit-, Integrations-, Systemtests.",
+      "tags": [
+        "Test"
+      ],
+      "prio": 3
+    },
+    {
+      "front": "Teststufen (V-Modell)?",
+      "back": "1. **Komponenten-/Unit-Test**: einzelne Funktion/Klasse, Entwickler\n2. **Integrationstest**: Zusammenspiel/Schnittstellen der Komponenten\n3. **Systemtest**: Gesamtsystem gegen Anforderungen (Pflichtenheft), Testumgebung\n4. **Abnahmetest**: durch den Kunden gegen Lastenheft, oft in Produktivnähe",
+      "tags": [
+        "Test"
+      ],
+      "prio": 4
+    },
+    {
+      "front": "Black-Box- vs. White-Box-Test?",
+      "back": "**Black-Box**: ohne Kenntnis des Codes, gegen die Spezifikation (Ein-/Ausgaben) – Äquivalenzklassen, Grenzwerte.\n**White-Box**: mit Kenntnis des Codes – Anweisungs-, Zweig-, Pfadüberdeckung.\n**Grey-Box**: Mischform (z. B. Schnittstellenkenntnis).",
+      "tags": [
+        "Test"
+      ],
+      "prio": 5
+    },
+    {
+      "front": "Äquivalenzklassenbildung – Beispiel Alter 18–65 gültig?",
+      "back": "Eingaben werden in Klassen gleichen Verhaltens eingeteilt, je Klasse ein Testfall:\n- gültig: 18–65 (z. B. 40)\n- ungültig: < 18 (z. B. 10), > 65 (z. B. 70), kein Zahlwert (\"abc\")",
+      "tags": [
+        "Test"
+      ],
+      "prio": 4
+    },
+    {
+      "front": "Grenzwertanalyse – Beispiel 18–65?",
+      "back": "Fehler treten häufig an Grenzen auf. Teste ==direkt an und neben den Grenzen==: 17, 18, 19 und 64, 65, 66.",
+      "tags": [
+        "Test"
+      ],
+      "prio": 4
+    },
+    {
+      "front": "Anweisungs- vs. Zweigüberdeckung (C0/C1)?",
+      "back": "**C0 – Anweisungsüberdeckung**: jede Anweisung mindestens einmal ausgeführt.\n**C1 – Zweigüberdeckung**: jeder Zweig jeder Verzweigung (auch das leere „else“) mindestens einmal durchlaufen. C1 schließt C0 ein.\n**C2 Pfadüberdeckung**: alle Pfade (oft unrealistisch viele).",
+      "tags": [
+        "Test",
+        "Coverage"
+      ],
+      "prio": 4
+    },
+    {
+      "front": "Code-Coverage berechnen: 40 von 50 Anweisungen ausgeführt?",
+      "back": "Anweisungsüberdeckung = ausgeführte / alle Anweisungen = 40/50 = ==80 %==.\nZweigüberdeckung analog: durchlaufene Zweige / alle Zweige.",
+      "tags": [
+        "Test",
+        "Coverage",
+        "Übung"
+      ],
+      "prio": 3
+    },
+    {
+      "front": "Aufbau eines Unit-Tests (AAA)?",
+      "back": "```\n@Test\nvoid rabattAb100Euro() {\n  // Arrange\n  Warenkorb w = new Warenkorb(); w.add(120.0);\n  // Act\n  double p = w.endpreis();\n  // Assert\n  assertEquals(108.0, p, 0.001);\n}\n```\nArrange – Act – Assert. Unabhängig, wiederholbar, schnell.",
+      "tags": [
+        "Test",
+        "Unit"
+      ],
+      "prio": 3
+    },
+    {
+      "front": "Test-Driven Development (TDD)?",
+      "back": "Zyklus ==Red – Green – Refactor==:\n1. Fehlschlagenden Test schreiben (rot)\n2. Minimalen Code schreiben, bis Test grün\n3. Code verbessern, Tests bleiben grün\nVorteile: hohe Testabdeckung, testbares Design, Spezifikation durch Tests.",
+      "tags": [
+        "Test",
+        "TDD"
+      ],
+      "prio": 4
+    },
+    {
+      "front": "Mock/Stub/Treiber – wozu?",
+      "back": "**Stub/Mock**: Platzhalter für noch fehlende oder externe Komponenten (DB, Webservice), liefern definierte Antworten; Mocks prüfen zusätzlich die Aufrufe.\n**Treiber**: ruft die zu testende Komponente auf (Bottom-up-Integration).",
+      "tags": [
+        "Test"
+      ],
+      "prio": 2
+    },
+    {
+      "front": "Regressionstest?",
+      "back": "Erneutes Ausführen bestehender Tests nach Änderungen, um sicherzustellen, dass ==bisher funktionierende Teile nicht beschädigt== wurden. Ideal automatisiert in der CI-Pipeline.",
+      "tags": [
+        "Test"
+      ],
+      "prio": 3
+    },
+    {
+      "front": "Last-, Performance-, Stresstest?",
+      "back": "**Lasttest**: Verhalten unter erwarteter (Spitzen-)Last.\n**Performancetest**: Antwortzeiten/Durchsatz messen.\n**Stresstest**: Last über die Grenze hinaus → wo/wie bricht das System, erholt es sich?",
+      "tags": [
+        "Test"
+      ],
+      "prio": 3
+    },
+    {
+      "front": "Testfall – welche Angaben gehören dazu?",
+      "back": "ID, Beschreibung/Ziel, Vorbedingungen, Testdaten/Eingaben, Durchführungsschritte, ==erwartetes Ergebnis==, tatsächliches Ergebnis, Status (bestanden/fehlgeschlagen), Tester/Datum.",
+      "tags": [
+        "Test"
+      ],
+      "prio": 3
+    },
+    {
+      "front": "Verifikation vs. Validierung?",
+      "back": "**Verifikation**: Wird das Produkt ==richtig== gebaut? (entspricht der Spezifikation)\n**Validierung**: Wird das ==richtige== Produkt gebaut? (erfüllt den Zweck/Kundennutzen)",
+      "tags": [
+        "QS"
+      ],
+      "prio": 3
+    },
+    {
+      "front": "Fehler, Fehlerzustand, Fehlerwirkung (ISTQB)?",
+      "back": "**Irrtum** (Error): menschliche Fehlhandlung → **Fehlerzustand** (Defect/Bug) im Code → **Fehlerwirkung** (Failure): sichtbares Fehlverhalten bei Ausführung.",
+      "tags": [
+        "QS"
+      ],
+      "prio": 2
+    },
+    {
+      "front": "CI/CD und Testautomatisierung?",
+      "back": "**Continuous Integration**: Jeder Commit wird automatisch gebaut und getestet.\n**Continuous Delivery**: jederzeit auslieferbarer Stand, Deployment auf Knopfdruck. **Continuous Deployment**: automatisch bis in Produktion.\nTools: GitHub Actions, GitLab CI, Jenkins.",
+      "tags": [
+        "Test",
+        "CI"
+      ],
+      "prio": 3
+    },
+    {
+      "front": "Code-Review – Ziele?",
+      "back": "Fehler früh finden, Wissen verteilen, Einheitlichkeit/Coding Standards, Wartbarkeit verbessern. Formen: Pull-Request-Review, Pair Programming, Walkthrough, formale Inspektion.",
+      "tags": [
+        "QS"
+      ],
+      "prio": 2
+    },
+    {
+      "front": "Grundsätze der Dialoggestaltung (DIN EN ISO 9241-110)?",
+      "back": "1. Aufgabenangemessenheit\n2. Selbstbeschreibungsfähigkeit\n3. Erwartungskonformität\n4. Erlernbarkeit\n5. Steuerbarkeit\n6. Robustheit gegen Benutzerfehler (früher Fehlertoleranz)\n7. Benutzerbindung (früher Individualisierbarkeit)",
+      "tags": [
+        "Usability"
+      ],
+      "prio": 3
+    },
+    {
+      "front": "Usability vs. User Experience (UX)?",
+      "back": "**Usability** (Gebrauchstauglichkeit, ISO 9241-11): Effektivität, Effizienz, Zufriedenstellung bei der Nutzung.\n**UX**: gesamtes Nutzungserlebnis ==vor, während und nach== der Nutzung inkl. Emotionen und Erwartungen.",
+      "tags": [
+        "Usability"
+      ],
+      "prio": 3
+    },
+    {
+      "front": "Barrierefreiheit – Beispiele und Rechtsgrundlage?",
+      "back": "Alternativtexte für Bilder, ausreichende Kontraste, Tastaturbedienbarkeit, skalierbare Schrift, Screenreader-Kompatibilität, keine Information nur über Farbe. Standards: ==WCAG==, BITV 2.0; seit 28.06.2025 gilt das Barrierefreiheitsstärkungsgesetz (BFSG) für viele digitale Produkte/Dienste.",
+      "tags": [
+        "Usability"
+      ],
+      "prio": 2
+    },
+    {
+      "front": "Methoden zur Usability-Prüfung?",
+      "back": "Usability-Test mit echten Nutzern (Think-Aloud), heuristische Evaluation durch Experten, A/B-Tests, Eye-Tracking, Fragebögen (z. B. SUS), Prototypen/Mockups früh testen.",
+      "tags": [
+        "Usability"
+      ],
+      "prio": 2
+    }
+  ]
+}

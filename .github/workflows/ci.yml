@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  core:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+      - name: Format
+        run: cargo fmt --all --check
+      - name: Clippy (Core)
+        run: cargo clippy -p lernkartei-core --all-targets -- -D warnings
+      - name: Tests (Core + Inhalte)
+        run: cargo test -p lernkartei-core
+
+  ui:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: JS-Syntax
+        run: for f in ui/*.js; do node --check "$f"; done
+      - name: UI-Smoke-Test (Browser-Mock)
+        run: |
+          pip install playwright
+          python scripts/ui_smoke.py shots
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ui-screenshots
+          path: shots
