@@ -21,7 +21,7 @@ Karteikarten-App (Android-APK) in **Rust + Tauri 2**, UI in Vanilla-JS ohne Buil
 - Lint: `cargo fmt --all && cargo clippy -p lernkartei-core --all-targets -- -D warnings`
 - UI im Browser testen: `python3 scripts/ui_smoke.py /tmp/shots` (Screenshots + JS-Fehlerprüfung)
 - Manuell: `python3 -m http.server` im Root → `http://localhost:8000/ui/`
-- Android lokal: `cd src-tauri && tauri android init && tauri android build --apk` (SDK/NDK nötig; sonst nur CI)
+- Android lokal: `npm ci && npm run tauri -- android init && npm run tauri -- android build --apk` (SDK/NDK nötig; sonst nur CI)
 
 ## Regeln
 - Logik gehört in `crates/core` (testbar), nicht in `src-tauri` oder JS.

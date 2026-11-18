@@ -47,8 +47,8 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Tauri CLI
-        run: npm install -g @tauri-apps/cli@^2
+      - name: Tauri CLI (lokal, damit Gradle sie wiederfindet)
+        run: npm ci
 
       - name: Versionscode setzen (fortlaufend → Updates installierbar)
         run: |
@@ -56,14 +56,12 @@ jobs:
           mv tmp.json src-tauri/tauri.conf.json
 
       - name: Android-Projekt erzeugen
-        working-directory: src-tauri
         run: |
-          tauri android init --ci
-          cp -r icons/android/* gen/android/app/src/main/res/
+          npm run tauri -- android init --ci
+          cp -r src-tauri/icons/android/* src-tauri/gen/android/app/src/main/res/
 
       - name: APK bauen
-        working-directory: src-tauri
-        run: tauri android build --apk --ci --target aarch64 --target armv7
+        run: npm run tauri -- android build --apk --ci --target aarch64 --target armv7
 
       - name: APK signieren
         env:

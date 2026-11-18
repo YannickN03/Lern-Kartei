@@ -1,0 +1,12 @@
+{
+  "name": "lernkartei",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Nur für die Tauri-CLI (Android-Build). Die UI braucht keinen Build-Schritt.",
+  "scripts": {
+    "tauri": "tauri"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2"
+  }
+}
