@@ -1,0 +1,24 @@
+{
+  "id": "ap1-wiederholung",
+  "name": "AP1-Wiederholung für AP2",
+  "category": "AP1 → AP2",
+  "description": "Rechen- und Grundlagenthemen aus AP1, die in AP2-Aufgaben erneut gebraucht werden",
+  "color": "#6f6a86",
+  "icon": "🔁",
+  "cards": [
+    {"front": "Dezimal- vs. Binärpräfixe (kB/KiB …)?", "back": "Dezimal (SI): 1 kB = 1000 B, 1 MB = 10⁶ B, 1 GB = 10⁹ B, 1 TB = 10¹² B.\nBinär (IEC): 1 KiB = 1024 B, 1 MiB = 1024² B, 1 GiB = 1024³ B.\nFestplattenhersteller rechnen dezimal, Betriebssysteme oft binär → „1 TB“ ≈ 931 GiB.", "tags": ["AP1", "Rechnen"], "prio": 3},
+    {"front": "Zahlensysteme umrechnen: 202 dezimal in binär und hexadezimal?", "back": "202 = 128 + 64 + 8 + 2 → ==1100 1010₂== → Nibbles 1100 = C, 1010 = A → ==CA₁₆==", "tags": ["AP1", "Rechnen", "Übung"], "prio": 3},
+    {"front": "Speicherbedarf eines Bildes: 1920 × 1080 Pixel, 24 Bit Farbtiefe?", "back": "1920 · 1080 · 3 Byte = 6.220.800 B ≈ ==6,22 MB== (≈ 5,93 MiB), unkomprimiert.", "tags": ["AP1", "Rechnen", "Übung"], "prio": 3},
+    {"front": "Speicherbedarf Video: 30 fps, 1920 × 1080, 24 Bit, 10 s unkomprimiert?", "back": "6.220.800 B · 30 · 10 = 1.866.240.000 B ≈ ==1,87 GB==", "tags": ["AP1", "Rechnen", "Übung"], "prio": 2},
+    {"front": "Stromkosten berechnen: Server 350 W, 24/7, 1 Jahr, 0,30 €/kWh?", "back": "0,35 kW · 24 h · 365 = 3.066 kWh · 0,30 € = ==919,80 €/Jahr==", "tags": ["AP1", "Rechnen", "Green IT", "Übung"], "prio": 3},
+    {"front": "Verfügbarkeit berechnen: 99,9 % – wie viel Ausfall pro Jahr?", "back": "0,1 % von 8760 h = ==8,76 h== pro Jahr (99,99 % → 52,6 Min.; 99 % → 87,6 h).", "tags": ["AP1", "Rechnen"], "prio": 3},
+    {"front": "Gesamtverfügbarkeit von Komponenten in Reihe bzw. parallel?", "back": "**Reihe** (alle nötig): V = V₁ · V₂ · … (z. B. 0,99 · 0,98 = 0,9702).\n**Parallel/redundant** (eine reicht): V = 1 − (1−V₁)·(1−V₂) (z. B. 1 − 0,01·0,02 = 0,9998).", "tags": ["AP1", "Rechnen"], "prio": 2},
+    {"front": "Logikgatter und Wahrheitstabelle AND, OR, XOR, NOT?", "back": "| A | B | AND | OR | XOR |\n|---|---|---|---|---|\n| 0 | 0 | 0 | 0 | 0 |\n| 0 | 1 | 0 | 1 | 1 |\n| 1 | 0 | 0 | 1 | 1 |\n| 1 | 1 | 1 | 1 | 0 |\nNOT invertiert; NAND/NOR = negiertes AND/OR.", "tags": ["AP1", "Logik"], "prio": 2},
+    {"front": "Hardware-Komponenten eines Arbeitsplatz-PCs und Auswahlkriterien?", "back": "CPU (Kerne, Takt), RAM (Größe, Typ DDR5), Massenspeicher (SSD NVMe vs. HDD), Grafik, Mainboard/Schnittstellen (USB-C, Thunderbolt), Netzteil (Effizienz 80 PLUS), Monitor (Auflösung, Ergonomie). Kriterien: Anforderungen des Nutzers, Kosten, Energieeffizienz, Erweiterbarkeit, Garantie.", "tags": ["AP1", "Hardware"], "prio": 2},
+    {"front": "Virtualisierung: Hypervisor Typ 1 vs. Typ 2; virtuelle Desktops?", "back": "**Typ 1 (Bare Metal)**: direkt auf der Hardware (ESXi, Hyper-V, Proxmox) – Server.\n**Typ 2 (Hosted)**: auf einem Host-OS (VirtualBox, VMware Workstation) – Test/Entwicklung.\n**VDI** (virtuelle Desktops): Desktops laufen zentral im Rechenzentrum, Zugriff per Thin Client – zentrale Verwaltung, Sicherheit.", "tags": ["AP1", "Virtualisierung"], "prio": 2},
+    {"front": "Ergonomie am Bildschirmarbeitsplatz?", "back": "Bildschirm in Armlänge, Oberkante auf Augenhöhe oder darunter, seitlich zum Fenster (keine Blendung), höhenverstellbarer Stuhl/Tisch, Füße flach auf dem Boden, Unterarme waagerecht, regelmäßige Pausen/Bewegung. Rechtsgrundlage: ArbStättV.", "tags": ["AP1", "Ergonomie"], "prio": 2},
+    {"front": "Kundenschulung/Einweisung planen – was gehört dazu?", "back": "Zielgruppe und Vorwissen analysieren, Lernziele, Inhalte und Methoden (Vortrag, Übung, Handout), Zeit/Ort/Medien, Durchführung, Erfolgskontrolle/Feedback, Dokumentation (Abnahme-/Einweisungsprotokoll).", "tags": ["AP1", "Kunden"], "prio": 2},
+    {"front": "Abnahmeprotokoll – Inhalte?", "back": "Auftrag/Projekt, Datum, Beteiligte, geprüfte Leistungen, festgestellte Mängel mit Fristen, Ergebnis (Abnahme erteilt/unter Vorbehalt/verweigert), Unterschriften. Mit der Abnahme beginnt bei Werkverträgen die Gewährleistungsfrist und die Vergütung wird fällig.", "tags": ["AP1", "Verträge"], "prio": 3},
+    {"front": "Prozentrechnung im Angebot: Listenpreis 1.200 €, 10 % Rabatt, 2 % Skonto, + 19 % USt?", "back": "1.200 − 120 = 1.080 €\n1.080 − 21,60 = 1.058,40 €\n· 1,19 = ==1.259,50 €== (gerundet)", "tags": ["AP1", "Rechnen", "Übung"], "prio": 2}
+  ]
+}

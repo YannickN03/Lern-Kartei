@@ -1,0 +1,20 @@
+{
+  "id": "projektarbeit",
+  "name": "Betriebliche Projektarbeit",
+  "category": "Projekt & Präsentation",
+  "description": "Projektantrag, Dokumentation, Präsentation, Fachgespräch (50 % der AP2)",
+  "color": "#8b6cff",
+  "icon": "🎓",
+  "cards": [
+    {"front": "Rahmen der betrieblichen Projektarbeit FIAE?", "back": "Max. ==80 Stunden== inkl. Dokumentation, danach 15 Min. Präsentation + 15 Min. Fachgespräch. Gewichtung ==50 %== der Gesamtnote. Projekt muss vorab per Projektantrag von der IHK genehmigt werden.", "tags": ["Projekt"], "prio": 5},
+    {"front": "Inhalte des Projektantrags?", "back": "Projektbezeichnung, Ausgangssituation/Problem, Projektziel, Projektumfeld, ==Zeitplanung mit Phasen und Stunden==, geplante Dokumentation/Präsentationsmittel, Ressourcen. Muss eine fachliche Eigenleistung im Bereich Anwendungsentwicklung erkennen lassen (kein reines Administrieren).", "tags": ["Projekt"], "prio": 4},
+    {"front": "Typische Gliederung der Projektdokumentation?", "back": "1. Einleitung (Umfeld, Ziel, Begründung, Schnittstellen, Abgrenzung)\n2. Projektplanung (Phasen, Ressourcen, Entwicklungsprozess)\n3. Analyse (Ist-Analyse, Wirtschaftlichkeit/Amortisation, Make-or-Buy, Anwendungsfälle, Lastenheft)\n4. Entwurf (Architektur, UI, Datenmodell, Geschäftslogik, Pflichtenheft)\n5. Implementierung\n6. Qualitätssicherung/Tests\n7. Abnahme & Einführung\n8. Dokumentation (Benutzer/Entwickler)\n9. Fazit (Soll-Ist-Vergleich, Lessons Learned, Ausblick)\nAnhang: Diagramme, Code-Auszüge, Tests", "tags": ["Projekt", "Doku"], "prio": 5},
+    {"front": "Formale Anforderungen an die Doku?", "back": "Meist max. ==15 Seiten== Fließtext ohne Anhang (IHK-abhängig!), Deckblatt, Inhalts-, Abbildungs-, Abkürzungsverzeichnis, Quellen, eidesstattliche Erklärung, einheitliche Formatierung, Seitenzahlen. Vorgaben der eigenen IHK prüfen.", "tags": ["Projekt", "Doku"], "prio": 4},
+    {"front": "Soll-Ist-Vergleich im Fazit – was gehört hinein?", "back": "Tabelle geplante vs. tatsächliche Stunden je Phase, Begründung der Abweichungen, Zielerreichung (alle Muss-Anforderungen erfüllt?), Lessons Learned, Ausblick auf Erweiterungen.", "tags": ["Projekt", "Doku"], "prio": 4},
+    {"front": "Tipps für die Projektpräsentation (15 Min.)?", "back": "Roter Faden: Ausgangslage → Ziel → Vorgehen → Ergebnis → Fazit. Zielgruppe = Prüfungsausschuss (fachlich, aber nicht im Projekt). Wenig Text, aussagekräftige Grafiken, ein Gedanke pro Folie, ggf. kurze Demo, Zeit einhalten (Probedurchlauf!), Blickkontakt, freie Rede, Folien nummerieren.", "tags": ["Präsentation"], "prio": 4},
+    {"front": "Wie bereitet man sich auf das Fachgespräch vor?", "back": "Jede Entscheidung im Projekt begründen können (Warum diese Technologie/Architektur? Alternativen?), Diagramme und Code erklären, Grundlagenwissen rund ums Projektthema (Datenbanken, Sicherheit, Tests, DSGVO), Wirtschaftlichkeitsrechnung nachvollziehen, ehrlich bleiben bei Wissenslücken.", "tags": ["Fachgespräch"], "prio": 4},
+    {"front": "Typische Fragen im Fachgespräch?", "back": "- Warum haben Sie sich für X statt Y entschieden?\n- Wie haben Sie getestet? Welche Testfälle?\n- Wie wird die Anwendung abgesichert (SQL-Injection, Rechte)?\n- Was würden Sie heute anders machen?\n- Wie lief die Abnahme / wer hat abgenommen?\n- Erklären Sie dieses Diagramm / diesen Codeausschnitt.", "tags": ["Fachgespräch"], "prio": 3},
+    {"front": "Bewertungskriterien der Präsentation?", "back": "Aufbau/Struktur, sachliche Richtigkeit, Medieneinsatz und Visualisierung, Sprache/Auftreten (Rhetorik, Körpersprache), Zeitmanagement, Adressatengerechtigkeit.", "tags": ["Präsentation"], "prio": 3},
+    {"front": "Regeln für gute Folien?", "back": "Max. ca. 5–7 Stichpunkte, große Schrift (≥ 18 pt), hoher Kontrast, einheitliches Design, Diagramme statt Tabellen, Quellenangaben, keine ganzen Sätze vorlesen, Animationen sparsam.", "tags": ["Präsentation"], "prio": 2}
+  ]
+}
