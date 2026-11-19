@@ -16,9 +16,12 @@ python3 v07_groupby.py ../../ui/shorts/07-sql-group-by-having.mp4 gemini-07.wav
 
 Der Generator ordnet die Szenen über Silbenzahl + Sprechpausen der Sprachspur zu. Ohne WAV wird offline mit SVOX Pico vertont.
 
+Hinweis: Glyphen wie →, ≈, ≤ fehlen in den Schriften (Tofu) – in Bild/Untertitel `–`, `ca.`, `<=` verwenden.
+
 Stil-Anweisung: *Deutsche Erklärstimme für ein kurzes Lernvideo für Azubis vor der IHK-Abschlussprüfung. Muttersprachliches Hochdeutsch, warm, freundlich und selbstsicher wie ein guter Tutor, lebendig aber nicht werblich. Zügiges, natürliches Tempo (ca. 155 Wörter/Minute), klare Betonung der Fachbegriffe, kurze Pausen nach jedem Satz. Englische Fachbegriffe korrekt englisch aussprechen, Abkürzungen (SQL, UML, AES …) buchstabieren.*
 
 - `narration.py`: Sprechertexte für Gemini (je Szene ein Eintrag)
+- `preview.py`: Endbild jeder Szene als PNG ohne Audio (`python3 preview.py v17_binaere_suche /tmp/prev`) – Layout prüfen, bevor vertont wird
 - `engine.py`: Elemente (Box, Tabelle, Pfeil, Code, Raute, Knoten …), Einblenden, Untertitel, Rendern mit ffmpeg
 - `vNN_*.py`: ein Video je Datei; jedes Segment hat `say` (Sprechertext, Fachbegriffe lautschriftlich), `cap` (Untertitel) und `do` (Bildoperationen)
 - Schriften: Patrick Hand, Nunito (SIL Open Font License)

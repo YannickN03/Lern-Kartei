@@ -114,6 +114,115 @@
         "RSA",
         "TLS"
       ]
+    },
+    {
+      "file": "12-er-modell.mp4",
+      "title": "ER-Modell & Kardinalitäten",
+      "description": "Entitäten, Beziehungen 1:1, 1:n, n:m – und wie daraus Tabellen mit Fremdschlüsseln und Zwischentabellen werden.",
+      "deck": "datenmodellierung",
+      "tags": [
+        "ERM",
+        "Kardinalität",
+        "Datenbank"
+      ]
+    },
+    {
+      "file": "13-netzplan.mp4",
+      "title": "Netzplan & kritischer Pfad",
+      "description": "FAZ, FEZ, SAZ, SEZ per Vorwärts- und Rückwärtsrechnung, Puffer bestimmen und den kritischen Pfad finden.",
+      "deck": "projektmanagement",
+      "tags": [
+        "Netzplan",
+        "Kritischer Pfad",
+        "Projektmanagement"
+      ]
+    },
+    {
+      "file": "14-uml-anwendungsfalldiagramm.mp4",
+      "title": "UML-Anwendungsfalldiagramm",
+      "description": "Akteure, Systemgrenze und Use Cases – und der Klassiker: «include» vs. «extend» mit der richtigen Pfeilrichtung.",
+      "deck": "uml-bpmn",
+      "tags": [
+        "UML",
+        "Use Case",
+        "include/extend"
+      ]
+    },
+    {
+      "file": "15-scrum.mp4",
+      "title": "Scrum in 90 Sekunden",
+      "description": "Rollen, Artefakte und Events, User Stories und Burndown – plus die typischen Verwechslungen in der Prüfung.",
+      "deck": "projektmanagement",
+      "tags": [
+        "Scrum",
+        "Agil",
+        "User Story"
+      ]
+    },
+    {
+      "file": "16-whitebox-ueberdeckung.mp4",
+      "title": "White-Box-Test: C0 & C1",
+      "description": "Kontrollflussgraph, Anweisungs- vs. Zweigüberdeckung und die minimale Anzahl an Testfällen.",
+      "deck": "qualitaet-test",
+      "tags": [
+        "Testen",
+        "Überdeckung",
+        "White-Box"
+      ]
+    },
+    {
+      "file": "17-binaere-suche.mp4",
+      "title": "Binäre Suche",
+      "description": "Links, Mitte, rechts: ein sortiertes Array halbieren, Pseudocode iterativ und rekursiv, Aufwand O(log n).",
+      "deck": "algorithmen",
+      "tags": [
+        "Suche",
+        "Rekursion",
+        "Pseudocode"
+      ]
+    },
+    {
+      "file": "18-sql-ddl-dml-unterabfragen.mp4",
+      "title": "SQL: DDL, DML & Unterabfragen",
+      "description": "CREATE TABLE mit Schlüsseln, INSERT/UPDATE/DELETE (WHERE nicht vergessen!) und Unterabfragen mit IN und AVG.",
+      "deck": "sql",
+      "tags": [
+        "SQL",
+        "DML",
+        "Unterabfrage"
+      ]
+    },
+    {
+      "file": "19-uml-zustandsdiagramm.mp4",
+      "title": "UML-Zustandsdiagramm",
+      "description": "Zustände, Transitionen mit Ereignis [Bedingung] / Aktion, entry/do/exit – und der Unterschied zum Aktivitätsdiagramm.",
+      "deck": "uml-bpmn",
+      "tags": [
+        "UML",
+        "Zustandsdiagramm"
+      ]
+    },
+    {
+      "file": "20-rest-http.mp4",
+      "title": "REST-API & HTTP",
+      "description": "Request/Response, HTTP-Methoden und CRUD, JSON, Statuscodes (401 vs. 403) und Idempotenz.",
+      "deck": "web-technik",
+      "tags": [
+        "REST",
+        "HTTP",
+        "JSON"
+      ]
+    },
+    {
+      "file": "21-hashing-sql-injection.mp4",
+      "title": "Passwörter hashen & SQL-Injection",
+      "description": "Hash + Salt mit bcrypt/Argon2 statt Klartext – und Prepared Statements gegen ' OR '1'='1.",
+      "deck": "it-sicherheit",
+      "tags": [
+        "Hashing",
+        "Salt",
+        "SQL-Injection"
+      ]
     }
   ]
 }
