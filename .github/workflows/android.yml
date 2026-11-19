@@ -34,7 +34,15 @@ jobs:
         run: |
           SDKM=$(ls -d "$ANDROID_HOME"/cmdline-tools/*/bin | sort -V | tail -n1)/sdkmanager
           yes | "$SDKM" --licenses > /dev/null || true
-          "$SDKM" --install "platforms;android-34" "build-tools;${BUILD_TOOLS}" "ndk;${NDK_VERSION}" > /dev/null
+          # Downloads brechen gelegentlich ab („Error reading Zip content“) → bis zu 3 Versuche
+          for i in 1 2 3; do
+            if "$SDKM" --install "platforms;android-34" "build-tools;${BUILD_TOOLS}" "ndk;${NDK_VERSION}" > /dev/null \
+               && [ -f "$ANDROID_HOME/ndk/${NDK_VERSION}/source.properties" ]; then break; fi
+            echo "SDK/NDK-Installation fehlgeschlagen (Versuch $i) – neuer Versuch"
+            rm -rf "$ANDROID_HOME/ndk/${NDK_VERSION}" "$ANDROID_HOME/.temp"
+            [ "$i" = 3 ] && exit 1
+            sleep 15
+          done
           echo "NDK_HOME=$ANDROID_HOME/ndk/${NDK_VERSION}" >> "$GITHUB_ENV"
 
       - uses: dtolnay/rust-toolchain@stable
